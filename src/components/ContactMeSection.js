@@ -29,8 +29,18 @@ const LandingSection = () => {
       comment: '',
     },
     onSubmit: (values) => {
-      // submit
-      console.log('onSubmit', values);
+      submit('', values).then(() => {
+        if (response.type === 'success') {
+          onOpen(
+            'success',
+            `Thanks for your submission ${values.firstName}, we will get back to you shortly.`
+          );
+          formik.resetForm();
+        }
+        if (response.type === 'error') {
+          onOpen('error', 'Something went wrong, please try again later.');
+        }
+      });
     },
     validationSchema: Yup.object({
       firstName: Yup.string().required('Required'),
@@ -101,8 +111,13 @@ const LandingSection = () => {
                 />
                 <FormErrorMessage>{formik.errors.comment}</FormErrorMessage>
               </FormControl>
-              <Button type="submit" colorScheme="purple" width="full">
-                Submit
+              <Button
+                type="submit"
+                colorScheme="purple"
+                width="full"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Loading...' : 'Submit'}
               </Button>
             </VStack>
           </form>
