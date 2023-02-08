@@ -30,6 +30,9 @@ const LandingSection = () => {
     },
     onSubmit: (values) => {
       submit('', values).then(() => {
+        if (!response) {
+          onOpen('error', 'Something went wrong, please try again later.');
+        }
         if (response.type === 'success') {
           onOpen(
             'success',
