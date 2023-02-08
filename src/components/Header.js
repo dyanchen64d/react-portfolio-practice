@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -33,6 +33,9 @@ const socials = [
 ];
 
 const Header = () => {
+  const prevy = useRef(0);
+  const [isScrollDown, setIsScrollDown] = useState(false);
+
   const handleClick = (anchor) => () => {
     const id = `${anchor}-section`;
     const element = document.getElementById(id);
@@ -43,6 +46,18 @@ const Header = () => {
       });
     }
   };
+
+  const scrollHandler = () => {
+    setIsScrollDown(window.scrollY > prevy.current);
+    prevy.current = window.scrollY;
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', scrollHandler);
+    return () => {
+      window.removeEventListener('scroll', scrollHandler);
+    };
+  });
 
   return (
     <Box
@@ -56,6 +71,7 @@ const Header = () => {
       transitionTimingFunction="ease-in-out"
       backgroundColor="#18181b"
       minWidth={1024}
+      transform={`${isScrollDown ? 'translateY(-200px)' : 'translateY(0px)'}`}
     >
       <Box color="white" maxWidth="1280px" margin="0 auto">
         <HStack
